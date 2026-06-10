@@ -6,3 +6,5 @@ preco = float(input("Qual o valor? "))
 
 total = quantidade * preco
 print(f"Total do dia: R$ {total}")
+
+
