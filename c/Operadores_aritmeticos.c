@@ -3,8 +3,8 @@
 int main() {
     /*
     incremento (++)
-    pre-decremento ++a
-    pos-decremento a++
+    pre-incremento ++a
+    pos-incremento a++
     decremento (--)
     pre-decremento --a
     pos-decremento a--
