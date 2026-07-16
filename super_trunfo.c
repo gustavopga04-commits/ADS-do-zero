@@ -1,15 +1,15 @@
 /*
  * Super Trunfo de Paises - TechNova
- * Desafio 1 (Cadastro & Calculos) | Nivel: MESTRE
+ * Desafio 2 (Logica do Jogo) | Nivel: NOVATO
  *
- * Novidades deste nivel (em cima do Aventureiro):
- *   - Populacao agora e "unsigned long int" (aguenta numeros bem grandes)
- *   - Calcular o SUPER PODER de cada carta
- *   - COMPARAR as duas cartas atributo por atributo, imprimindo 1 ou 0
- *     (1 = Carta 1 vence | 0 = Carta 2 vence)
+ * Novidade deste desafio:
+ *   - Comparar as duas cartas por UM atributo (escolhido no codigo)
+ *     usando ESTRUTURAS DE DECISAO: if / else if / else.
+ *   - Dizer com clareza qual carta venceu (ou se houve empate).
  *
- * Tema do nivel: operadores relacionais (>, <) e modificadores de tipo.
- * Truque: "a > b" ja resulta em 1 (verdadeiro) ou 0 (falso) -> nao precisa de if!
+ * Regra da comparacao:
+ *   - Vence a carta com o MAIOR valor no atributo...
+ *   - ...EXCETO a Densidade Populacional, onde vence a de MENOR valor.
  *
  * Autor: Gustavo
  * Compilar: gcc super_trunfo.c -o super_trunfo
@@ -21,20 +21,17 @@
 int main() {
     /* ================================================================
      * CARTA 1 - Declaracao das variaveis
-     * Populacao mudou para "unsigned long int": so numeros positivos,
-     * mas com uma faixa muito maior que o int comum.
      * ================================================================ */
     char  estado1;
     char  codigo1[10];
     char  cidade1[50];
-    unsigned long int populacao1;   /* <<< MUDOU: era int */
+    unsigned long int populacao1;
     float area1;
     float pib1;
     int   pontosTuristicos1;
 
     /* ================================================================
      * CARTA 1 - Leitura dos dados
-     *   "%lu" e o formato para ler/escrever unsigned long int
      * ================================================================ */
     printf("=== Cadastro da Carta 1 ===\n");
 
@@ -48,7 +45,7 @@ int main() {
     scanf(" %49[^\n]", cidade1);
 
     printf("Populacao: ");
-    scanf("%lu", &populacao1);       /* <<< MUDOU: era %d */
+    scanf("%lu", &populacao1);
 
     printf("Area (em km2): ");
     scanf("%f", &area1);
@@ -97,45 +94,28 @@ int main() {
     scanf("%d", &pontosTuristicos2);
 
     /* ================================================================
-     * CALCULOS
-     *   Densidade e PIB per capita: iguais ao nivel Aventureiro.
-     *
-     *   SUPER PODER = soma de todos os atributos numericos +
-     *                 o INVERSO da densidade (1 / densidade), porque
-     *                 quanto MENOR a densidade, MAIOR deve ser o poder.
-     *
-     *   Atencao a conversao de tipos: como area, pib e pibPerCapita sao
-     *   float, a soma inteira vira float automaticamente. O "1.0f" garante
-     *   que 1/densidade seja divisao com casas decimais (e nao inteira).
+     * CALCULOS (vem dos niveis anteriores)
      * ================================================================ */
     float densidade1    = populacao1 / area1;
     float pibPerCapita1 = (pib1 * 1000000000.0) / populacao1;
-    float superPoder1   = populacao1 + area1 + pib1 + pontosTuristicos1
-                          + pibPerCapita1 + (1.0f / densidade1);
 
     float densidade2    = populacao2 / area2;
     float pibPerCapita2 = (pib2 * 1000000000.0) / populacao2;
-    float superPoder2   = populacao2 + area2 + pib2 + pontosTuristicos2
-                          + pibPerCapita2 + (1.0f / densidade2);
 
     /* ================================================================
-     * EXIBICAO - Carta 1
+     * EXIBICAO das duas cartas
      * ================================================================ */
     printf("\nCarta 1:\n");
     printf("Estado: %c\n", estado1);
     printf("Codigo: %s\n", codigo1);
     printf("Nome da Cidade: %s\n", cidade1);
-    printf("Populacao: %lu\n", populacao1);           /* <<< %lu */
+    printf("Populacao: %lu\n", populacao1);
     printf("Area: %.2f km2\n", area1);
     printf("PIB: %.2f bilhoes de reais\n", pib1);
     printf("Numero de Pontos Turisticos: %d\n", pontosTuristicos1);
     printf("Densidade Populacional: %.2f hab/km2\n", densidade1);
     printf("PIB per Capita: %.2f reais\n", pibPerCapita1);
-    printf("Super Poder: %.2f\n", superPoder1);        /* NOVO */
 
-    /* ================================================================
-     * EXIBICAO - Carta 2
-     * ================================================================ */
     printf("\nCarta 2:\n");
     printf("Estado: %c\n", estado2);
     printf("Codigo: %s\n", codigo2);
@@ -146,23 +126,31 @@ int main() {
     printf("Numero de Pontos Turisticos: %d\n", pontosTuristicos2);
     printf("Densidade Populacional: %.2f hab/km2\n", densidade2);
     printf("PIB per Capita: %.2f reais\n", pibPerCapita2);
-    printf("Super Poder: %.2f\n", superPoder2);
 
     /* ================================================================
-     * >>> NOVO NO MESTRE <<< - Comparacao das cartas
+     * >>> NOVO NO DESAFIO 2 <<< - Comparacao com if / else if / else
      *
-     * Cada "atributo1 > atributo2" resulta em 1 (Carta 1 vence) ou
-     * 0 (Carta 2 vence). Para a densidade a regra INVERTE: menor vence,
-     * entao usamos "<" no lugar de ">".
+     * Atributo escolhido para a batalha: POPULACAO (maior vence).
+     * Para comparar OUTRO atributo, e so trocar as variaveis abaixo.
+     *   Atencao: se escolher DENSIDADE, a regra inverte -> troque o
+     *   primeiro ">" por "<", porque ali quem tem MENOR valor vence.
+     *
+     * Como funciona:
+     *   - if  ...... testa a 1a condicao (Carta 1 maior)
+     *   - else if .. so e testado se o if acima foi falso (Carta 2 maior)
+     *   - else ..... se nenhuma das anteriores foi verdadeira (empate)
      * ================================================================ */
-    printf("\n=== Comparacao de Cartas (1 = Carta 1 vence | 0 = Carta 2 vence) ===\n");
-    printf("Populacao: %d\n", populacao1 > populacao2);
-    printf("Area: %d\n", area1 > area2);
-    printf("PIB: %d\n", pib1 > pib2);
-    printf("Pontos Turisticos: %d\n", pontosTuristicos1 > pontosTuristicos2);
-    printf("Densidade Populacional (menor vence): %d\n", densidade1 < densidade2);
-    printf("PIB per Capita: %d\n", pibPerCapita1 > pibPerCapita2);
-    printf("Super Poder: %d\n", superPoder1 > superPoder2);
+    printf("\n=== Comparacao de cartas (Atributo: Populacao) ===\n");
+    printf("Carta 1 - %s (Estado %c): %lu\n", cidade1, estado1, populacao1);
+    printf("Carta 2 - %s (Estado %c): %lu\n", cidade2, estado2, populacao2);
+
+    if (populacao1 > populacao2) {
+        printf("Resultado: Carta 1 (%s) venceu!\n", cidade1);
+    } else if (populacao2 > populacao1) {
+        printf("Resultado: Carta 2 (%s) venceu!\n", cidade2);
+    } else {
+        printf("Resultado: Empate!\n");
+    }
 
     return 0;
 }
