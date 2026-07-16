@@ -1,2 +1,9 @@
 # Executaveis compilados (nao precisam ir pro repositorio)
 *.exe
+
+# Outros artefatos de compilacao
+*.o
+*.obj
+
+# Configuracoes locais do VS Code (tem caminhos da sua maquina)
+.vscode/
